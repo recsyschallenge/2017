@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="ACM RecSys Challenge 2017">
-    <meta name="keywords" content="Recommender Systems, ACM RecSys Challenge, Job Recommendations, XING, CrowdRec">
+    <meta name="keywords" content="Recommender Systems, ACM RecSys Challenge, New Item Problem, Job Recommendations, Push Recommendations, XING">
     <meta name="author" content="Fabian Abel">
     <link rel="icon" href="http://recsys.acm.org/wp-content/themes/primo-wp/favicon.ico">
 
@@ -19,8 +19,8 @@
   </head>
 
   <body>
-
-    <div class="container">
+          
+    <div id="top" class="container">
       <div class="header clearfix" style="padding-bottom:5px;">
         <span style="float:left; padding-right: 15px;">
           <img src="./images/logo.png" alt="logo" width="50"/>
@@ -29,18 +29,368 @@
 
       <div style="margin-top:30px;font-family: Georgia,Helvetica,Arial,sans-serif">
         <ul class="nav nav-pills navbar-nav navbar-left">
-            <li role="presentation" class="active"><a href="#">About</a></li>
-            <li role="presentation"><a href="http://2016.recsyschallenge.com">Challenge 2016</a></li>
+            <li role="presentation" class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="#about">About</a></li>
+                <li><a href="#scenario">Scenario</a></li>
+                <li><a href="#challenges">Challenges</a></li>
+                <li><a href="#evaluation">Evaluation</a></li>
+                <li><a href="#dataset">Dataset</a></li>
+          </ul>
+            </li>
+            <li role="presentation" class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Participate <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="#participation">Participation</a></li>
+                <li><a href="#rules">Rules</a></li>
+                <li><a href="#questions">Ask questions</a></li>
+                <li><a href="#rules">Prizes</a></li>
+              </ul>
+            </li>
+            <li role="presentation"><a href="#dates">Timeline</a></li>
+            <li role="presentation" class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Workshop <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="#workshop">Paper submissions</a></li>
+                <li><a href="#organizers">Organizers</a></li>
+              </ul>
+            </li>
+            <li role="presentation"><a href="http://2016.recsyschallenge.com" style="color:lightgray;">Challenge 2016</a></li>
         </ul>
       </div>
       </div>
-      <div>
+
+
+
+      <!-- ABOUT -->
+      <div id="about" class="lead">
+        <div class="alert alert-success" role="alert">We are currently finishing the datasets, evaluation metrics and submission system. Please follow us on Twitter to get updates: <a href="https://twitter.com/recsyschallenge">@recsyschallenge</a></div>
         <h1>About</h1>
-        <p class="lead">
-          Details will follow. The ACM RecSys Challenge 2017 is again co-organized by <a href="https://xing.com">XING</a> and will dive further into the problem of job recommendations. To get an idea about the challenge, have a look at <a href="http://2016.recsyschallenge.com">2016.recsyschallenge.com</a>.
+        <p>
+          The ACM RecSys Challenge 2017 is focussing on the problem of job recommendations on <a href="https://www.xing.com/">XING</a> in a cold-start scenario. The challenge will consists of two phases: 
+        </p>
+        <ol>
+          <li><strong>offline evaluation:</strong> fixed historic dataset and fixed targets for which recommendations/solutions need to be computed/submitted.</li>
+          <li><strong>online evaluation:</strong> dynamically changing targets. Recommendations submitted by the teams will actually be rolled out in <a href="https://www.xing.com/">XING</a>'s live system (details about the online evaluation such as the approach for ensuring fair conditions between the teams will follow).</li>
+        </ol>
+        <p>Both phases aim at the following task: </p>
+        
+        <blockquote> 
+          <strong>Task:</strong> given a new job posting p, the goal is to identify those users that (a) may be interested in receiving the job posting as a push recommendation and (b) that are also appropriate candidates for the given job. 
+          </blockquote>
+
+        <p>For both offline and online evaluation, the same evaluation metrics and the same types of data sets will be used. The offline evaluation is essentially used as an entry gate to the online evaluation: 
+        </p>
+        <ul>
+          <li>the top 20 teams (which also pass a XING baseline) will be allowed to participate in the online evaluation. </li>
+          <li>Winner of RecSys Challenge 2017 = Winner of the online challenge</li>
+        </ul>
+      </div>
+
+      <div id="scenario" class="lead">
+        <h2>Recommendation Scenario <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h2>
+        <p>Both offline and online evaluation focus on a <i>push recommendation scenario</i> in which new items (job postings) are given and users need to be identified...</p>
+
+        <ol> 
+          <li>who are interested in job postings in general (e.g. open to new job offers, willing to change their job)</li>
+          <li>who are interested in the particular job posting which they are notified about</li>
+          <li>who are an appropriate candidate for the given job posting (e.g. recruiters who own the job postings indicate that they are interested in the candidate)</li>
+        </ol>
+
+        <p>Those users will receive the new job posting as push recommendation. In particular, the push recommendations are rolled out via the XING platform as follows:</p>
+        <ul>
+          <li><strong>Input:</strong> Job posting <code>p1</code> is given. This posting <code>p1</code> is a new item that just came on the platform and did not receive any clicks yet.</li>
+          <li><strong>Computing recommendations:</strong> Given <code>p1</code>, the recommender computes a list such as <code>(u42, 0.8), (u23, 0.7), ...</code> Those <code>(user_id, score)</code>-tuples describe...
+            <ul>
+              <li>ID of the user (e.g. <code>u42</code>)</li>
+              <li>a relevance score (e.g. <code>0.8</code>) which should reflect two aspects: 
+                <ol>
+                  <li><i>interest of the user in the job:</i> to what extent is the user interested in the job posting?</li>
+                  <li><i>interest of a recruiter in the candidate:</i> how good does the candidate match the job, i.e. would a recruiter be interested in the candidate?</li>
+                </ol>
+              The score will be used for sorting and serves two purposes: 
+                <ul>
+                  <li><i>sorting job postings for a given user</i>, e.g.: if there are four postings which may be of interest, but XING would like to send only two postings as push recommendations to the user then one it will use the score to select the two top job recommendations for the user)</li>
+                  <li><i>sorting the candidates:</i> this is, for example, required when candidate recommendations are shown to a recruiter. </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><strong>Channels:</strong> given the list of recommendations such as <code>(p1, u42, 0.8), (p1, u23, 0.7), ...</code>, the recommendations are delivered to users through the following channels:
+            <ul>
+              <li><i>activity stream:</i> "Vacancies matching your profile" story in the stream on <a href="https://xing.com">xing.com</a> and in the mobile apps. (see <a href="./images/screenshot-activity-stream.png" data-toggle="lightbox" data-gallery="multiimages" data-title="Job recommendation pushed into the activity stream of a user">screenshot</a>)</li>
+              <li><i>jobs marketplace:</i> an orange notification bubble in the side-bar and an orange label "new" highlights the new job recommendation, e.g. on xing.com/jobs or in the mobile apps (see: <a href="./images/screenshot-jobs-marketplace.png" data-toggle="lightbox" data-gallery="multiimages" data-title="Notifications about new job recommendations on xing.com/jobs">screenshot</a>)</li>
+              <li><i>emails:</i> if the user did not see the push recommendation then the user may receive an email that points him/her to the job recommendation (see <a href="./images/screenshot-email.png" data-toggle="lightbox" data-gallery="multiimages" data-title="Pushed job recommendations in emails">screenshot</a>)</li>
+              <li><i>recruiter tools:</i> users which receive a job posting as push recommendation are also likely to appear as candidate recommendations to recruiters, for example, in the so-called <a href="https://www.xing.com/xtm">XING talent manager</a> (see <a href="./images/screenshot-xtm.png" data-toggle="lightbox" data-gallery="multiimages" data-title="Candidate recommendations in XTM">screenshot</a>)</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      
+
+      <div id="challenges" class="lead">
+        <h2>Challenges <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h2>
+        <p>Some challenges that the participating teams will need to solve:</p>
+        <ul>
+          <li><strong>Balancing user interest and recruiter demands:</strong> In contrast to <a href="http://2016.recsyschallenge.com/">last year's challenge</a> which was solely focusing on estimating how relevant a job is for a given user, this year we will focus on both: Job recommendations should be relevant to the users and at the same time the users who receive those job recommendations also need to be appropriate candidates for the given job (e.g. the fact whether a user received interest from a given recruiter is part of the evaluation measure). </li>
+          <li><strong>Balancing relevance and revenue:</strong> Some of the content is paid and some users pay for subscriptions. Teams will need to balance between relevance of recommendations and monetary aspects (i.e. the money that is earned with the recommendation). </li>
+          <li><strong>Novelty / sparsity:</strong> recommendations need to be computed particularly for newly created job postings (those postings have not received any interaction). </li>
+          <li><strong>Smart targeting of push recommendations:</strong> also, teams will need to estimate how likely it is that a user is actually interested in job recommendations, e.g. users that are not interested in job recommendations may delete recommendations or disable push recommendation notifications in case they receive too many (the latter is primarily relevant for teams that participate in the online challenge).</li>
+
+      </div>
+
+      <div id="evaluation" class="lead">
+        <h2>Evaluation Metrics <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h2>
+        <div class="alert alert-success" role="alert">To be finalized. Current plan below:</div>
+        <p>Given a list of target items <code>targetItems</code>, for which the recommender selects those users to whom <code>item in T</code>, is pushed as recommendation, we compute the the leaderboard score as follows:</p>
+
+        <pre>score(targetItems) = targetItems.map(item => score(item, recommendations(item))).sum</pre>
+
+        <p>Here, <code>recommendations(item)</code> specifies the list of users who will receive the given item as push recommendation. The function <code>score(item, users)</code> is defined as follows:</p>
+
+<pre>score(item, users) = 
+  users.map(u => userSuccess(item,u)).sum + itemSuccess(item, users)
+  
+  userSucess(item, user) = 
+    (
+        if (clicked) 1 else 0 
+      + if (bookmarked || replied) 5 else 0 
+      + if (recruiter interest) 20 else 0 
+      - if (delete only) 10 else 0 
+    ) * premiumBoost(user)
+
+  premiumBoost(user) = if (user.isPremium) 2 else 1 
+      
+  itemSuccess(item, users) = 
+    if (users.filter(u => success(item, u) > 0).size > 1) {
+      if (item.isPaid) 50
+      else 25
+    } else 0 
+</pre>
+  <p>Meaning:</p>
+  <ul>
+    <li><code>score(item, users)</code> sums up the success rates of the users and the item-based success rate.</li>
+    <li><code>userSucess(item, user)</code> scores a user-item pair based on the interactions between those items:
+      <ul>
+        <li>clicks: user clicked on the pushed recommendation (1 point)</li>
+        <li>bookmarks/replies: the user bookmarked the item or clicked on the reply button (which guides the user to the application form of the job posting) (5 points)</li>
+        <li>recruiter interest: a recruiter who owns the item showed interest into the user (e.g. clicked on the profile) for the given job item (20 points)</li>
+        <li>deletes: in case we solely observed that the user delted the item (no click, no bookmark/reply, no recruiter interest), we count the pushed recommendation as negative feedback (-10 points)</li>
+      </ul>
+    </li>
+    <li><code>premiumBoost(user)</code> userSuccess scores count double points for premium users.</li>
+    <li><code>itemSuccess(item, users)</code> if at least one successful push recommendation was created for a given item then this counts 50 points for paid items and 25 for other items.</li>
+  </ul>
+  <p>Purpose of evaluation metrics:</p>
+  <ul>
+    <li>both user satisfaction and the success from an item (aka recruiter) perspective is taken into account</li>
+    <li>satisfied (and dissatisfied) premium users have a stronger impact than basic users.</li>
+    <li>paid content is promoted compared to non-paid content</li>
+  </ul>
+  <p>The above evaluation metrics will be applied for both offline evaluation and online evaluation (in the offline evaluation, the target items won't change during the challenge while in the online evaluation, new target items are relased on a daily basis).</p>
+      </div>
+
+      <div id="dataset" class="lead">
+        <h2>Dataset <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h2>
+        <div class="alert alert-success" role="alert">Coming soon...</div>
+      </div>
+
+
+      <div id="participation" class="lead">
+        <h1>Participation <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h1>
+        <p>For participating in the challenge, you will need to...</p>
+        <ul>
+          <li>login with your XING account to the submisson system: <a href="https://recsys.xing.com/">recsys.xing.com</a> (not online yet)</li>
+          <li>create a team</li>
+          <li>accept the <a href="#rules">rules of the challenge</a> (fair play, don't be evil)</li>
+          <li>download the data and get started...</li>
+        </ul>
+      </div>
+
+      <div id="rules" class="lead">
+        <h2>Rules <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h2>
+        <div class="alert alert-success" role="alert">To be finalized. Current draft of rules:</div>
+
+
+    <h3>Data</h3>
+    <p>Datasets that are released as part of the RecSys challenge are
+      semi-synthetic, non-complete samples, i.e. XING data is sampled and enriched with noise. Regarding the released datasets, participants have to stick to the following rules:</p>
+
+    <ol>
+      <li>Attempting to identify users or to reveal any private information about
+        the users or information about the business from which the data is coming
+        from is strictly forbidden.</li>
+      <li>It is strictly forbidden to share the datasets with others.</li>
+      <li>It is not allowed to use the data for commercial purposes.</li>
+      <li>The data may only be used for academic purposes.</li>
+      <li>It is not allowed to use the data in any way that harms XING or XING's customers.</li>
+    </ol>
+
+    <p><strong>Licence of the data:</strong> All rights are reserved by <a href="http://xing.com">XING AG</a>.</p>
+
+    <h3>Final Paper</h3>
+    <p>Each team should submit a paper describing the algorithms that they developed for the task (see <a href="">paper submissions &amp; workshop</a>). Teams without a paper submission to the RecSys Challenge workshop will be removed from the final leaderboard. 
+    </p>
+
+    <h3>No Crawling on XING</h3>
+    <p>It is not allowed to crawl additional information from XING (e.g. via XING's APIs or by scraping details from XING pages). 
+    </p>
+
+    <h3>L’esprit sportif / Fair-play</h3>
+    <p>Please stick to the rules above, only sign-up for one team and stick to the submission limits: you can upload at maximum 20 solutions per day (for the offline challenge). We may suspend a team from the challenge if we get the impression that the team is not playing fair.
+    </p>
+
+
+    <h3>Ask us</h3>
+    <p class="lead">If you are unsure of whether something is allowed or not, contact us (e.g. <a href="https://github.com/recsyschallenge/2017/issues">create an issue on github</a>) and we will be happy to help you. Above all remember it's all for science, so be creative, not evil!</p>
+
+      </div>
+
+
+      <div id="questions" class="lead">
+        <h2>Questions <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h2>
+        <p>Questions and remarks about the procedure and other aspects concerning the challenge can be submitted as <a href="https://github.com/recsyschallenge/2017/issues/">github issues</a>.
         </p>
       </div>
 
+      <div id="prizes" class="lead">
+        <h2>Prizes <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h2>
+        <p>Prizes are given out to the teams that achieved the highest scores at the end of the online evaluation:</p>
+        <ul>
+          <li>First Team: 3000 €</li>
+          <li>Second Team: 1500 €</li>
+          <li>Third Team: 500 €</li>
+        </ul>
+      </div>
+      <p>In order to get the prize money, teams have to describe their algorithms in an accompanying paper and present it during the <i>RecSys Challenge workshop</i> in Como, Italy.</p>
+
+      <!-- DATES -->
+
+      <div id="dates">
+        <h1>Timeline <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h1>
+        <table class="table table-striped lead">
+          <thead>
+            <th>When?</th>
+            <th>What?</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Beginning of March</td>
+              <td><strong>RecSys challenge starts:</strong>
+                <ul>
+                  <li>RecSys challenge starts with <i>offline evaluation</i></li>
+                  <li>Submission system will be available via <a href="https://recsys.xing.com/">recsys.xing.com</a> (currently offline)</li>
+                  <li>Maximum number of submissions per day: 20</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>April 16th (23:59 Hawaiian time)</td>
+              <td>
+                <strong>Offline evaluation ends:</strong>  
+                <ul>
+                  <li>Based on the overall leaderboard of the <i>offline challenge</i>, the top teams (probably top 20) are asked to join the <i>online challenge</i></li>
+                  <li>Top teams get access to API of the online challenge. </li>
+                  <li>The submission of the offline challenge will continue to be open</li>
+                  <li>After this deadline there will be a possibility to join the online challenge for teams who achieve awesome scores</li>
+                </ul>
+</td>
+            </tr>
+            <tr>
+              <td>May 1st</td>
+              <td><strong>Online challenge starts:</strong>
+                <ul>
+                  <li>Every day, new target items will be released for which the teams are supposed to compute recommendations, i.e. identify users that may be interested in these items.</li>
+                  <li>Teams download the new target list via API, compute recommendations and submit their solutions via API.</li>
+                </ul>
+                Teams can script their recommender systems to regulalry pull from the API to check for updates.
+              </td>
+            </tr>
+            <tr>
+              <td>June 4th (23:59 Hawaiian time)</td>
+              <td><strong>Online evaluation ends:</strong>
+                <ul>
+                  <li>Last day of online evaluation</li>
+                  <li>Submission system closes</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>June 12th</td>
+              <td>
+                <ul>
+                  <li>Official results will be announced</li>
+                  <li>Winner of the challenge = winner of the online challenge</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>June 18th</td>
+              <td><strong>Paper submission deadline</strong> for RecSys Challenge workshop</td>
+            </tr>
+            <tr>
+              <td>July 3rd</td>
+              <td>Notifications about paper acceptance</td>
+            </tr>
+            <tr>
+              <td>July 17th</td>
+              <td>Deadline for camera-ready papers</td>
+            </tr>
+            <tr>
+              <td>August 27th-31st</td>
+              <td>Workshop will take place as part of the <a href="https://recsys.acm.org/recsys17/">RecSys conference</a> in <a href="https://recsys.acm.org/recsys17/location/">Como, Italy</a>.</td>
+            </tr>
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- Workshop -->
+
+      <div class="lead">
+        <h1 id="workshop">Paper Submissions  &amp; Workshop <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h1>
+        <p>Each team - not only the top teams - should submit a paper that describes the algorithms that they used for solving the challenge. Those papers will be reviewed by the <a href="#program-committee">program committee</a> (non-blind double review). At least one of the authors is expected to register for the RecSys Challenge workshop which will take place as part of the <a href="https://recsys.acm.org/recsys17/">RecSys conference</a> in Como, Italy.
+        </p>
+
+        <h3>Format <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h3>
+        <p class="lead">Papers should not exceed 4-6 pages. They have to be uploaded as PDF and have to be prepared according to the standard ACM SIG proceedings format: <a href="http://www.acm.org/publications/proceedings-template">templates</a>.</p>
+
+        <h3>Upload Paper <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h3>
+        <p>Papers (and later also the camera-ready versions) have to be uploaded via EasyChair:
+          <strong><a href="https://easychair.org/conferences/?conf=recsyschallenge2017">submit paper via EasyChair</a><strong></p>
+
+        <h3>Publication <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h3>
+        <p class="lead">We aim to publish the accepted papers in a special volume of ACM Sig Proceedings dedicated for the challenge (cf. Proceedings of the last year: <a href="http://dl.acm.org/citation.cfm?id=2987538">ACM</a>, <a href="http://dblp2.uni-trier.de/db/conf/recsys/challenge2016">DBLP</a>). </p>
+
+        <h3 id="program-committee">Program Committee <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h3>
+        <div class="alert alert-success" role="alert">Coming later.</div>
+      <div>
+
+
+     <!-- ORGANIZERS -->
+
+      <div id="organizers" class="lead">
+        <h3>Organizers <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h3>
+        <ul>
+          <li><a href="http://fabianabel.de">Fabian Abel</a>, <a href="https://xing.com">XING AG</a></li>
+          <li><a href="http://ydeldjoo.me/">Yashar Deldjoo</a>, <a href="http://recsys.deib.polimi.it/">Politecnico Milano</a></li>
+          <li><a href="https://www.linkedin.com/in/mehdielahi/">Mehdi Elahi</a>, <a href="https://www.unibz.it/en/">Free University of Bozen-Bolzano</a> </li>
+          <li><a href="https://www.xing.com/profile/Daniel_Kohlsdorf">Daniel Kohlsdorf</a>, <a href="https://xing.com">XING AG</a></li>
+        </ul>
+        
+        <h3>Advisors <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h3>
+        <ul>
+          <li><a href="https://dms.sztaki.hu/en/people/andras-benczur">András Benczúr</a>, <a href="https://dms.sztaki.hu/en">Hungarian Academy of Sciences</a></li>
+          <li><a href="https://dms.sztaki.hu/en/people/robert-palovics">Róbert Pálovics</a>, <a href="https://dms.sztaki.hu/en">Hungarian Academy of Sciences</a> (godfather of the challenge)</li>
+          <li><a href="http://alans.se/">Alan Said</a>, <a href="http://his.se/en/Research/informatics/Skovde-Artificial-Intelligence-Lab/">University of Skövde</a></li>
+        </ul>
+      </div>
 
       <hr/>
       <div style="text-align:center">
@@ -57,6 +407,9 @@
       </div>
 
     </div><!-- /.container -->
+
+
+
 
 
     <!-- JavaScript -->
