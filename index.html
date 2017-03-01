@@ -38,6 +38,7 @@
                 <li><a href="#challenges">Challenges</a></li>
                 <li><a href="#evaluation">Evaluation</a></li>
                 <li><a href="#dataset">Dataset</a></li>
+                <li><a href="#baseline">Baseline</a>
           </ul>
             </li>
             <li role="presentation" class="dropdown">
@@ -45,6 +46,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a href="#participation">Participation</a></li>
+                <li><a href="#leaderboard">Leaderboard</a>
                 <li><a href="#rules">Rules</a></li>
                 <li><a href="#questions">Ask questions</a></li>
                 <li><a href="#prizes">Prizes</a></li>
@@ -113,7 +115,7 @@
                   <li><i>interest of the user in the job:</i> to what extent is the user interested in the job posting?</li>
                   <li><i>interest of a recruiter in the candidate:</i> how good does the candidate match the job, i.e. would a recruiter be interested in the candidate?</li>
                 </ol>
-              The score will be used for sorting and serves two purposes: 
+              The score is only needed during the online evaluation and will be used for sorting and serves two purposes: 
                 <ul>
                   <li><i>sorting job postings for a given user</i>, e.g.: if there are four postings which may be of interest, but XING would like to send only two postings as push recommendations to the user then one it will use the score to select the two top job recommendations for the user)</li>
                   <li><i>sorting the candidates:</i> this is, for example, required when candidate recommendations are shown to a recruiter. </li>
@@ -146,7 +148,7 @@
 
       <div id="evaluation" class="lead">
         <h2>Evaluation Metrics <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h2>
-        <div class="alert alert-success" role="alert">To be finalized. Current plan below:</div>
+        
         <p>Given a list of target items <code>targetItems</code>, for which the recommender selects those users to whom <code>item in T</code>, is pushed as recommendation, we compute the the leaderboard score as follows:</p>
 
         <pre>score(targetItems) = targetItems.map(item => score(item, recommendations(item))).sum</pre>
@@ -177,11 +179,12 @@
     <li><code>score(item, users)</code> sums up the success rates of the users and the item-based success rate.</li>
     <li><code>userSucess(item, user)</code> scores a user-item pair based on the interactions between those items:
       <ul>
-        <li>clicks: user clicked on the pushed recommendation (1 point)</li>
+        <li>clicks: user clicked at least once on the pushed recommendation, i.e. multiple clicks won't increase the points (1 point)</li>
         <li>bookmarks/replies: the user bookmarked the item or clicked on the reply button (which guides the user to the application form of the job posting) (5 points)</li>
         <li>recruiter interest: a recruiter who owns the item showed interest into the user (e.g. clicked on the profile) for the given job item (20 points)</li>
         <li>deletes: in case we solely observed that the user delted the item (no click, no bookmark/reply, no recruiter interest), we count the pushed recommendation as negative feedback (-10 points)</li>
       </ul>
+      At maximum, one can thus earn 52 points (= (1 + 5 + 20 - 0) * 2) per user-item pair.
     </li>
     <li><code>premiumBoost(user)</code> userSuccess scores count double points for premium users.</li>
     <li><code>itemSuccess(item, users)</code> if at least one successful push recommendation was created for a given item then this counts 50 points for paid items and 25 for other items.</li>
@@ -197,9 +200,151 @@
 
       <div id="dataset" class="lead">
         <h2>Dataset <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h2>
-        <div class="alert alert-success" role="alert">Coming soon...</div>
+        <p>
+          The training dataset is supposed to be used for experimenting and 
+          training your models. You can split the interaction data into training 
+          and test data. For example: you can leave out the last complete week 
+          from the interaction data and then try to predict whether for a given job posting, you can predict the users that will positively interact with the 
+          posting. 
+        </p>
+        <h3 id="dataset-anonymization">Anonymization, pseudonymization, noise <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h3>
+        <p>
+          The training dataset is a semi-synthetic sample of XING's dataset, i.e. it is not complete and enriched with noise in order anonymize the data. For example:</p>
+          <ul>
+            <li>the dataset contains artifical users </li>
+            <li>the dataset contains only a fraction of XING users and job postings </li>
+            <li>IDs are used instead of raw text for almost all attribute values (pseudonymization) </li>
+            <li>some attributes of the users may have been removed or flipped to <i>NULL / unknown</i>. </li>
+            <li>not all interactions of a user are contained in the dataset </li>
+            <li>some of the interactions are artificial (= have actually not been performed by the user)</li>
+            <li> timestamps have been shifted (but the order of interactions is kept) </li>
+          </ul>
+          <p>Attempting to identify users or to reveal any private information about the 
+          users or information about the business from which the data is coming from is strictly forbidden (cf. <a href="#rules">Rules</a>).
+          </p>
+
+          <h3 id="dataset-interactions">Interactions <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h3>
+          <p><strong>interactions.csv:</strong> 
+          Interactions are all transactions between a user and an item including
+          recruiter interests as well as impressions. Fields:</p>
+          <ul>
+            <li><code>user_id</code> ID of the user who performed the interaction (points to <code>users.id</code>) </li>
+            <li><code>item_id</code> ID of the item on which the interaction was performed (points to <code>items.id</code>) </li>
+            <li><code>created_at</code> a unix time stamp timestamp representing the time when the interaction got created </li>
+            <li><code>interaction_type</code> the type of interaction that was performed on the item: <ul>
+                <li>0 = XING showed this item to a user (= impression) </li>
+                <li>1 = the user clicked on the item </li>
+                <li>2 = the user bookmarked the item on XING </li>
+                <li>3 = the user clicked on the <i>reply button</i> or <i>application form button</i> that is shown on some job postings</li>
+                <li>4 = the user deleted a recommendation from his/her list of recommendation (clicking on "x") which has the effect that the recommendation will no longer been shown to the user and that a new recommendation item will be loaded and displayed to the user </li>
+                <li>5 = a recruiter from the items company showed interest into the user. (e.g. clicked on the profile)</li>
+              </ul></li>
+          </ul>
+
+          <h3 id="dataset-users">Users <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h3>
+          <p><strong>users.csv:</strong> Details about those users who appear in the above datasets. Fields:</p> 
+          <ul>
+            <li><code>id</code> anonymized ID of the user (referenced as <code>user_id</code> in the other datasets above) </li>
+            <li><code>jobroles</code> comma-separated list of jobrole terms (numeric IDs) that were extracted from the user's current job titles </li>
+            <li><code>career_level</code> career level ID (e.g. beginner, experienced, manager): <ul>
+                <li>0 = unknown </li>
+                <li>1 = Student/Intern </li>
+                <li>2 = Entry Level (Beginner) </li>
+                <li>3 = Professional/Experienced </li>
+                <li>4 = Manager (Manager/Supervisor) </li>
+                <li>5 = Executive (VP, SVP, etc.) </li>
+                <li>6 = Senior Executive (CEO, CFO, President)</li></ul></li>
+            <li><code>discipline_id</code> anonymized IDs represent disciplines such as "Consulting", "HR", etc. </li>
+            <li><code>industry_id</code> anonymized IDs represent industries such as "Internet", "Automotive", "Finance", etc. </li>
+            <li><code>country</code> describes the country in which the user is currently working<ul> 
+                <li>de = Germany </li>
+                <li>at = Austria</li>
+                <li>ch = Switzerland </li>
+                <li>non dach = non of the above countries</li></ul></li>
+            <li><code>region</code> is specified for some users who have as country <code>de</code>. Meaning of the regions see below</li>
+            <li><code>experience_n_entries_class</code> identifies the number of CV entries that the user has listed as <i>work experiences</i><ul>
+                <li> 0 = no entries </li>
+                <li> 1 = 1<li>2 entries </li>
+                <li> 2 = 3<li>4 entries </li>
+                <li> 3 = 5 or more entries</li></ul></li>
+            <li><code>experience_years_experience</code> is the estimated number of years of work experience that the user has<ul> 
+                <li> 0 = unknown </li>
+                <li> 1 = less than 1 year </li>
+                <li> 2 = 1 - 3 years </li>
+                <li> 3 = 3 - 5 years </li>
+                <li> 4 = 5 - 10 years </li>
+                <li> 5 = 10 - 20 years </li>
+                <li> 6 = more than 20 years </li> </ul> </li>
+            <li><code>experience_years_in_current</code> is the estimated number of years that the user is already working in her current job. Meaning of numbers: same as <code>experience_years_experience</code> </li>
+            <li><code>edu_degree</code> estimated university degree of the user<ul>  
+                <li> 0 or NULL = unknown </li>
+                <li> 1 = bachelor </li>
+                <li> 2 = master </li>
+                <li> 3 = phd </li> </ul> </li>
+            <li><code>edu_fieldofstudies</code> comma<li>separated fields of studies that the user studied. <code>0</code> means "unknown" and <code>edu_fieldofstudies > 0</code> entries refer to broad field of studies such as <i>Engineering</i>, <i>Economics and Legal</i>,  ... </li>
+            <li><code>wtcj</code> an estimation regarding the user's willingness to change jobs
+              <ul>
+                <li>0 XING predicts the user has a low interest of changing her job soon</li>
+                <li>1 XING predicts the user has a high interest in changing her current position</li> 
+              </ul> 
+            </li>
+            <li><code>premium</code> the user subscribed to XING's payed premium membership<ul>
+                <li>0 no subscription </li>
+                <li>1 active subscription </li> </ul> </li>
+            </ul>
+
+          <h3 id="dataset-items">Items <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h3>
+          <p><strong>items.csv:</strong> Details about the job postings that were and should be recommended to the users.</p>
+          <ul>
+            <li><code>id</code> anonymized ID of the item (referenced as <code>item_id</code> in the other datasets above) </li>
+            <li><code>industry_id</code> anonymized IDs represent industries such as "Internet", "Automotive", "Finance", etc.</li>
+            <li><code>discipline_id</code> anonymized IDs represent disciplines such as "Consulting", "HR", etc. </li>
+            <li><code>is_paid</code> indicates that the posting is a paid for by a compnay </li>
+            <li><code>career_level</code> career level ID (e.g. beginner, experienced, manager) <ul>
+                <li> 0 = unknown </li>
+                <li> 1 = Student/Intern </li>
+                <li> 2 = Entry Level (Beginner) </li>
+                <li> 3 = Professional/Experienced </li>
+                <li> 4 = Manager (Manager/Supervisor)</li>
+                <li> 5 = Executive (VP, SVP, etc.) </li>
+                <li> 6 = Senior Executive (CEO, CFO, President) </li> 
+              </ul> 
+            </li>
+            <li><code>country</code> code of the country in which the job is offered </li>
+            <li><code>latitude</code> latitude information (rounded to ca. 10km) </li>
+            <li><code>longitude</code> longitude information (rounded to ca. 10km) </li>
+            <li><code>region</code> is specified for some users who have as country `de`. Meaning of the regions: see below. </li>
+            <li><code>employment</code> the type of emploment 
+              <ul>
+                <li> 0 = unknown </li>
+                <li> 1 = full-time </li>
+                <li> 2 = part-time  </li>
+                <li> 3 = freelancer </li>
+                <li> 4 = intern </li>
+                <li> 5 = voluntary </li>
+              </ul>
+            </li>
+            <li><code>created_at</code> a unix time stamp timestamp representing the time when the interaction got created </li>
+            <li><code>title</code> concepts that have been extracted from the job title of the job posting (numeric IDs) </li>
+            <li><code>tags</code> concepts that have been extracted from the tags, skills or company name </li>
+          </ul>
+
+          <h3 id="dataset-targets">Targets <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h3>
+
+          <p>The dataset contains two additional files that contain target item IDs and target user IDs:</p>
+
+          <ul>
+            <li><strong>targetItems.csv</strong>: contains the list of item IDs (<i>items.id</i>) for which recommendations should be computed and submitted.</li>
+            <li><strong>targetUsers.csv</strong>: set of user IDs (<i>users.id</i>) which are allowed to appear in the recommendations/solutions that are submited. Hence, recommending an item to users that are not in <i>targetUsers.csv</i> will not gain any points during the offline challenge.</li>
+          </ul>
+          <p><strong>Note:</strong> solutions that are submitted are only allowed to conatin items and users from the above files.</p>
       </div>
 
+
+      <div id="baseline" class="lead">
+        <h2>Baseline <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h2>
+        <p>The baseline is using xgboost and is solely content-based. Details about the baseline and Python code are available at: <a href="https://github.com/recsyschallenge/2017/tree/master/baseline">github.com/recsyschallenge/2017/baseline/</a></p>
+      </div>
 
       <div id="participation" class="lead">
         <h1>Participation <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h1>
@@ -212,11 +357,15 @@
         </ul>
       </div>
 
+      <div id="leaderboard" class="lead">
+        <h2>Leaderboard <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h2>
+        <p>See: <a href="https://recsys.xing.com/leaders">recsys.xing.com/leaders</a></p>
+      </div>
+
+
       <div id="rules" class="lead">
         <h2>Rules <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h2>
-        <div class="alert alert-success" role="alert">To be finalized. Current draft of rules:</div>
-
-
+        
     <h3>Data</h3>
     <p>Datasets that are released as part of the RecSys challenge are
       semi-synthetic, non-complete samples, i.e. XING data is sampled and enriched with noise. Regarding the released datasets, participants have to stick to the following rules:</p>
