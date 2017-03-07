@@ -34,7 +34,7 @@ def classify_worker(item_ids, target_users, items, users, output_file, model):
 
                 # compute average score
                 average_score += sum(ypred)
-                num_evaluation += float(len(average_score))
+                num_evaluated += float(len(ypred))
 
                 # use all items with a score above the given threshold and sort the result
                 user_ids = sorted(
