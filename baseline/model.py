@@ -42,13 +42,13 @@ class Interaction:
             return 0.0
 
     def indus_match(self):
-        if self.user.indus == self.item.indus and self.item.indus != 23:
+        if self.user.indus == self.item.indus:
             return 1.0
         else:
             return 0.0
 
     def discipline_match(self):
-        if self.user.disc == self.item.disc and self.user.disc != 23:
+        if self.user.disc == self.item.disc:
             return 2.0
         else:
             return 0.0
