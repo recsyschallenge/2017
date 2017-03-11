@@ -68,7 +68,7 @@ Uploads a new solution for the team.
 ### Example request
 
 ```
-curl -vv -XPOST -H 'Authorization: Bearer RAtN...LTA1NjkyOGU5OTE5Mw==' 'https://recsys.xing.com/api/submission?label=test42%20(time-decay)' -d @solution_file.csv
+curl -vv -XPOST -H 'Authorization: Bearer RAtN...LTA1NjkyOGU5OTE5Mw==' 'https://recsys.xing.com/api/submission?label=test42%20(time-decay)' --data-binary @solution_file.csv
 ```
 
 Notes: 
