@@ -104,6 +104,6 @@ Notes:
 - `remaining_submissions_today`: number of submissions that the team can still do on the given day (CET timezone)
 - `lines_skipped`: array of line numbers that were skipped / not processed
 - Response codes: 
-  + `200` OK
+  + `200` OK (currently, a 200 is also returned when the no submissions are possible anymore according to `remaining_submissions_today`, i.e. check whether `remaining_submissions_today > 0` before submitting)
   + `400` Bad Request (e.g. if the solution file could not be parsed properly)
   + `401` Unauthorized (in case the access token is no longer valid or was not properly set in the Header of the request)
