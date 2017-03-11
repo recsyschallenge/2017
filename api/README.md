@@ -16,7 +16,7 @@ Get team details.
 ### Example request
 
 ```
-curl -vv -XGET -H 'Authorization: Bearer RAtN...LTA1NjkyOGU5OTE5Mw==' 'https://rexsys.xing.com/api/team'
+curl -vv -XGET -H 'Authorization: Bearer RAtN...LTA1NjkyOGU5OTE5Mw==' 'https://recsys.xing.com/api/team'
 ```
 
 Notes: 
@@ -68,7 +68,7 @@ Uploads a new solution for the team.
 ### Example request
 
 ```
-curl -vv -XPOST -H 'Authorization: Bearer RAtN...LTA1NjkyOGU5OTE5Mw==' 'https://rexsys.xing.com/api/submission?label=test42%20(time-decay)' @solution_file.csv
+curl -vv -XPOST -H 'Authorization: Bearer RAtN...LTA1NjkyOGU5OTE5Mw==' 'https://recsys.xing.com/api/submission?label=test42%20(time-decay)' @solution_file.csv
 ```
 
 Notes: 
