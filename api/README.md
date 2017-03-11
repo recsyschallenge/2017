@@ -6,8 +6,8 @@ downloading data (relevant for online challenge) and uploading solutions.
 
 Current list of endpoints: 
 
-- [GET /api/team](#get-api-team)
-- [POST /api/submission](#post-api-submission)
+- [GET /api/team](#get-apiteam)
+- [POST /api/submission](#post-apisubmission)
 
 ## GET /api/team
 
@@ -55,7 +55,7 @@ Notes:
 - `submissions` pas submissions of the team
   + `score`: the score that was achieved
   + `rank`: the rank that the team achieved with the submission (at the time the submission was done)
-  + `label`: the (optinal) label that the team passed when [submitting the solution](#post-api-submission)
+  + `label`: the (optinal) label that the team passed when [submitting the solution](#post-apisubmission)
   + `submitted_at`: timestamp when the solution was submitted
 - Response codes: 
   + `200` OK
