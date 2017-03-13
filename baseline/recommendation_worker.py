@@ -56,8 +56,11 @@ def classify_worker(item_ids, target_users, items, users, output_file, model):
                     fp.flush()
 
             # Every 100 iterations print some stats
-            if pos % 100 == 0:            
-                score = str(average_score / num_evaluated)
+            if pos % 100 == 0:
+                try:
+                    score = str(average_score / num_evaluated)
+                except ZeroDivisionError:
+                    score = 0
                 percentageDown = str(pos / float(len(item_ids)))
                 print(output_file + " " + percentageDown + " " + score)
             pos += 1        
