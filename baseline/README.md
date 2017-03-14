@@ -1,6 +1,9 @@
 Baseline
 ========
 
+!!!!!! DELETE THE HEADER IN THE TARGET FILES !!!!!!!
+========
+
 This is the simple baseline that creates the sample_solution.csv file.
 The baseline system extracts features from interacted user-item pairs
 and "learns" if a user will interact positively with an item.
