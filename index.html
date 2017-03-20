@@ -177,7 +177,7 @@
   premiumBoost(user) = if (user.isPremium) 2 else 1 
       
   itemSuccess(item, users) = 
-    if (users.filter(u => userSuccess(item, u) > 0).size > 1) {
+    if (users.filter(u => userSuccess(item, u) > 0).size >= 1) {
       if (item.isPaid) 50
       else 25
     } else 0 
