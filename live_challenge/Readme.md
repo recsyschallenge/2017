@@ -21,6 +21,15 @@ On top of the target users and the new items, teams will
 also receive a list of impressions and interactions of the
 previous day. The impressions will also include
 recommendations from other teams. 
+The score will be calculated on all item user pairs a team submitted.
+A submitted recommendations can be interacted with for one week.
+Afterwards, the interactions of a user with that item do not
+count towards the final score. 
+The winning team is the one that achieved the highest
+sum of their two best scoring weeks. The winnner
+of the challenge will be announced one week after
+the last submisssion slot.
+
 
 Online Data Description:
 ---------------
