@@ -12,7 +12,7 @@ The online evaluation is set up as follows. The goal of each team is the same as
   + interactions: the interactions that those users performed recently (cf. [interactions.csv](http://2017.recsyschallenge.com/#dataset-interactions))
 - Each day the teams then receive... 
   + a set of target users = those user IDs to whom the team can recommend new items (cf. [targetUsers.csv](http://2017.recsyschallenge.com/#dataset-targets))
-  + the new items for which can be recommended to the target users. Format of the item description is the same as during the offline evaluation: [items.csv](http://2017.recsyschallenge.com/#dataset-items)
+  + the new items which can be recommended to the target users. Format of the item description is the same as during the offline evaluation: [items.csv](http://2017.recsyschallenge.com/#dataset-items)
   + updated interactions: the interactions that have been collected during the previous day (cf. [interactions.csv](http://2017.recsyschallenge.com/#dataset-interactions))
     - The impressions/interactions will also include entries that have been triggered by other teams or by XING's search and recommendation systems. 
 - `X_t-1` till `X_t`: Within these 24 hours, teams can submit their solution files (columns: `item_id`, `user_ids`). Here, the following restrictions hold: 
