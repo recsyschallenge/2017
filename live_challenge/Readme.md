@@ -2,6 +2,26 @@ Live Challenge
 ----------------
 ![Recsys2017 Timeline](img/timeline.png)
 
+The live challenge is set up as follows. The goal of each team is to 
+find find user item pairs that promise a mutual interest between a job
+seeking user and the recruiter that is associated with the posting.
+
+Teams will be presented with a set of users and their profile information 
+at the beginning of the challenge. This set stays valid throughout the whole
+live challenge period. Each day the teams then receive a set of target
+users and a set of new items. The items include the same information 
+as in the offline challenge. Teams will then submit user item pairs
+in the 24 hours after the daily release. Teams will be allowed to
+submit each user id from their target list one time. It is ok if 
+the team chooses to not play out a recommendation for a user. 
+If the team submits a posting older than 24 hours, a user
+not in their target list or a user they qalreadhy pushed to that
+day, the system will simply ignore the following information.
+On top of the target users and the new items, teams will
+also receive a list of impressions and interactions of the
+previous day. The impressions will also include
+recommendations from other teams. 
+
 Online Data Description:
 ---------------
 
