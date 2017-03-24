@@ -1,5 +1,6 @@
 Live Challenge
 ----------------
+![Recsys2017 Timeline](img/timeline.png)
 
 Online Data Description:
 ---------------
