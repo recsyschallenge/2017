@@ -1,5 +1,5 @@
 Live Challenge
-----------------
+=====================
 ![Recsys2017 Timeline](img/timeline.png)
 
 The live challenge is set up as follows. The goal of each team is to 
