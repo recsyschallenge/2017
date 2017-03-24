@@ -50,13 +50,12 @@ dataset.save_binary("recsys2017.buffer")
 
 
 '''
-3) Train XGBoost regression model with maximum tree depth of 6 and 250 trees
+3) Train XGBoost regression model with maximum tree depth of 2 and 25 trees
 '''
 evallist = [(dataset, 'train')]
 param = {'bst:max_depth': 2, 'bst:eta': 0.1, 'silent': 1, 'objective': 'reg:linear' }
 param['nthread']     = 4
 param['eval_metric'] = 'rmse'
-param['nthread']     = 5
 param['base_score']  = 0.0
 num_round            = 25
 bst = xgb.train(param, dataset, num_round, evallist)
