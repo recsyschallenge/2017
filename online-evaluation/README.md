@@ -33,6 +33,11 @@ the last submisssion slot.
 
 ## Differences to Offline Evaluation
 
-- TODO...
-
+In contrast to the offline evaluation:
+  - teams can only recommend to a user once
+  - there is a fixed window of one day in which the recommendation for the target users and target items have to be submitted
+  - the score is not calculated over all submissions but over the two best weeks
+  - the interaction data will not include the impressions from the xing recommenders but only the ones submitted by teams
+  
+  
 
