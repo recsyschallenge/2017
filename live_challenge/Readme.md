@@ -1,7 +1,8 @@
 Live Challenge
 ----------------
 
-##Online Data Description:
+Online Data Description:
+---------------
 
 + Xing releases user information once:
 	- Xing hands out X users with their respective profile information
@@ -34,7 +35,8 @@ Live Challenge
 	- The team's impression indicate that a team attempted a recommendation (the team is not known)
 	- A xing decline is an indicator that our recommender filtered the recommendation out. That means that we do not guarantee that all recommendations are shown to the user
 
-##Recommendations:
+Recommendations:
+---------------
 	
 + After the teams received the daily data dump and their target users:
 	- The teams have 24 hours to submit their recommendations.
