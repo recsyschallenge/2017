@@ -6,7 +6,7 @@ Online Data Description:
 ---------------
 
 + Xing releases user information once:
-	- Xing hands out X users with their respective profile information
+	- Xing hands out one million users with their respective profile information
 	- The user information contains the same fields as released in the offline challenge
 	- The user information is not updated during the challenge
 	- The set of users doesn't change during the challenge
@@ -18,12 +18,15 @@ Online Data Description:
 	- Teams can only submit recommendations for those users
 
 + Xing releases item information once per day:
-	- Every day we hand out Y new items to be recommended by the teams to their target users
+	- Every day we hand out all new items 
+    - The teams have to recommend users from their target list to these items
 	- The item information will contain the same information as released in the offline challenge
 	- The items can only be recommended for 24 hours after the release
 
 + Xing releases interactions from previous day, once a day:
-	- Every day we hand out all recommendations that were played out
+	- Every day we hand out all interactions that happened during the last day on the challenge specific recommendations
+    - Specifically we hand out all recommendations that were played out to users and
+    all interactions which users are in the target user set and items that are in the dayly item set.
 	- The interactions can be of the following type:
 		* User Click
 		* User Delete
@@ -31,7 +34,6 @@ Online Data Description:
 		* User Delete
 		* Recruiter interest
 		* Team Impression 
-		* Xing Decline
 	- The user interactions are the same as in the offline challenge
 	- The team's impression indicate that a team attempted a recommendation (the team is not known)
 	- A xing decline is an indicator that our recommender filtered the recommendation out. That means that we do not guarantee that all recommendations are shown to the user
