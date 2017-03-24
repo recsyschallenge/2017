@@ -104,7 +104,7 @@
 
       <div id="scenario" class="lead">
         <h2>Recommendation Scenario <sup><a class="dropup" style="font-size:10px;" href="#top"><span class="caret"></span> top</a></sup></h2>
-        <p>Both offline and online evaluation focus on a <i>push recommendation scenario</i> in which new items (job postings) are given and users need to be identified...</p>
+        <p>The online evaluation focus on a <i>push recommendation scenario</i> in which new items (job postings) are given and users need to be identified...</p>
 
         <ol> 
           <li>who are interested in job postings in general (e.g. open to new job offers, willing to change their job)</li>
@@ -112,25 +112,12 @@
           <li>who are an appropriate candidate for the given job posting (e.g. recruiters who own the job postings indicate that they are interested in the candidate)</li>
         </ol>
 
-        <p>Those users will receive the new job posting as push recommendation. In particular, the push recommendations are rolled out via the XING platform as follows:</p>
-        <ul>
-          <li><strong>Input:</strong> Job posting <code>p1</code> is given. This posting <code>p1</code> is a new item that just came on the platform and did not receive any clicks yet.</li>
-          <li><strong>Computing recommendations:</strong> Given <code>p1</code>, the recommender computes a list such as <code>(u42, 0.8), (u23, 0.7), ...</code> Those <code>(user_id, score)</code>-tuples describe...
-            <ul>
-              <li>ID of the user (e.g. <code>u42</code>)</li>
-              <li>a relevance score (e.g. <code>0.8</code>) which should reflect two aspects: 
-                <ol>
-                  <li><i>interest of the user in the job:</i> to what extent is the user interested in the job posting?</li>
-                  <li><i>interest of a recruiter in the candidate:</i> how good does the candidate match the job, i.e. would a recruiter be interested in the candidate?</li>
-                </ol>
-              The score is only needed during the online evaluation and will be used for sorting and serves two purposes: 
-                <ul>
-                  <li><i>sorting job postings for a given user</i>, e.g.: if there are four postings which may be of interest, but XING would like to send only two postings as push recommendations to the user then one it will use the score to select the two top job recommendations for the user)</li>
-                  <li><i>sorting the candidates:</i> this is, for example, required when candidate recommendations are shown to a recruiter. </li>
-                </ul>
-              </li>
-            </ul>
-          </li>
+        <p> In the online challenge, teams will only submit their best user for an item to the system.
+          For each target item users are allowed to submit one or more tagregt users. However, each user can only be submitted once. 
+          Since push recommendations are presented to the users in a more prominent way, we decided on this restriction. These
+          recommendations are then played out to the user over the following channels.
+        </p>
+          
           <li><strong>Channels:</strong> given the list of recommendations such as <code>(p1, u42, 0.8), (p1, u23, 0.7), ...</code>, the recommendations are delivered to users through the following channels:
             <ul>
               <li><i>activity stream:</i> "Vacancies matching your profile" story in the stream on <a href="https://xing.com">xing.com</a> and in the mobile apps. (see <a href="./images/screenshot-activity-stream.png" data-toggle="lightbox" data-gallery="multiimages" data-title="Job recommendation pushed into the activity stream of a user">screenshot</a>)</li>
