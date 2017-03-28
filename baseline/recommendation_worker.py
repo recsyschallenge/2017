@@ -52,7 +52,6 @@ def classify_worker(item_ids, target_users, items, users, output_file, model):
                         user_id = str(user_ids[j][0]) + ","
                         fp.write(user_id)
                     user_id = str(user_ids[-1][0]) + "\n"
-                    fp.write(user_id)                
                     fp.flush()
 
             # Every 100 iterations print some stats
