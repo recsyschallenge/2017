@@ -9,13 +9,13 @@ Current list of endpoints:
 - [Offline evaluation](#offline-evaluation) 
   + [GET /api/team](#get-apiteam)
   + [POST /api/submission](#post-apisubmission)
-- [Online evaluation](#offline-evaluation) 
+- [Online evaluation](#online-evaluation) 
   + [GET /api/online/data/status](#get-apionlinedatastatus)
   + [GET /api/online/data/items](#get-apionlinedataitems)
   + [GET /api/online/data/users](#get-apionlinedatausers)
   + [GET /api/online/data/interactions](#get-apionlinedatainteractions)
   + [POST /api/online/submission](#post-apionlinesubmission)
-  + [GET /api/online/submission](#post-apionlinesubmission)
+  + [GET /api/online/submission](#get-apionlinesubmission)
 
 ## Offline Evaluation
 
@@ -123,7 +123,7 @@ Notes:
 
 The APIs for the online evaluation (see also: [details about online evaluation procedure](https://github.com/recsyschallenge/2017/tree/master/online-evaluation)) can only be used by those teams that are approved for the online challenge. The API endpoints below, require again an access token that can be generated on the [team details page (access token)](https://recsys.xing.com/team) and is different from the token that was used for the offline challenge: 
 
-![team details](images/teams-access-tokens.png)
+<img src="images/teams-access-tokens.png" width="450px" />
 
 All requests need to mention the access token as part of the HTTP authorization header, e.g.: 
 
