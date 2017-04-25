@@ -18,6 +18,7 @@ is rewritten to match the online challenge.
 
 The main script to execute and schedule a solution is: 'online_schedule.py'.
 You need the following libraries: 
+   
     + httplib2
     + xgboost
     + numpy
