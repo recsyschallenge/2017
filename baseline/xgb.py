@@ -66,7 +66,10 @@ bst.save_model('recsys2017.model')
 4) Create target sets for items and users
 '''
 target_users = []
-for line in open(TARGET_USERS):
+for n, line in enumerate(open(TARGET_USERS)):
+   # there is a header in target_users in dataset
+    if n == 0:
+         continue
     target_users += [int(line.strip())]
 target_users = set(target_users)
 
